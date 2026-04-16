@@ -161,3 +161,41 @@ let finder: locateFunc = (coord, point, person) => {
   // NOTE: IN TS, Object return types are strict about property names, not just values.
 //   return { x: coord, y: point, p: person };
 }
+
+// TS:? ReturnType<T>: It takes a function type and produces its return type
+type Predicate = (x: unknown) => boolean;
+type k = ReturnType<Predicate> // type K = boolean
+
+// NOTE: If we try to use ReturnType on a function name, we see an instructive error
+function f() {
+    return { x: 10, y: 12 }
+}
+// THIS RETURN INSTRUCTIVE ERROR
+/* type P = ReturnType<f>; */
+
+// BUT this is good
+type P = ReturnType<typeof f>;
+
+// 👉 This means: “Collect any number of string arguments into an array”
+function listMe(...items: string[]) {
+
+}
+
+// ?????
+// function fun(): ( x:string, y:string ) {
+//     return ("f", "j")
+// }
+
+/* Indexed Access Types 
+Definition:: We can use an indexed access type to look up a specific property on another type
+*/
+type PersonData = { name: string, age: number, alive: boolean };
+type Age = PersonData["age"];
+
+// The indexing type is itself a type, so we can use unions, keyof, or other types entirely:
+type I1 = PersonData["age" | "name"];
+type I2 = PersonData[keyof PersonData];
+
+type AliveOrName = "alive" | "name";
+type I3 = PersonData[AliveOrName];
+
