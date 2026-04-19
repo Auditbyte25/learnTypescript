@@ -215,8 +215,9 @@ class Sonar implements Pingable {
 
 /* ----------- Overriding Methods ---------- */
 /* A derived class can also override a base class field or property. 
-You can use the super. syntax to access base class methods */
+You can use the `super.` syntax to access base class methods */
 class BaseClass {
+    namestr = "tyu";
     greet() {
         console.log("Hello World");
     }
@@ -230,3 +231,75 @@ class DerivedClass extends BaseClass {
         }
     }
 }
+const d = new DerivedClass();
+d.greet();
+d.greet("reader");
+
+/* ----------- Type-only Field Declarations ---------- */
+/* When you extend a class and redeclare a field, TypeScript 
+might generate JavaScript that overwrites the parent’s value. 
+In modern JavaScript: Class fields are initialized AFTER super() runs
+So if you redeclare a field in the child class, it can reset/overwrite 
+what the parent already set.
+NOTE::Without `declare`, You lost the value set by the parent.
+✅ Solution: declare:: 🧠 What declare means:
+👉 “This is only for type checking”
+👉 “Do NOT generate any JavaScript for this”
+So:
+1. TypeScript knows resident is now Dog
+2. But at runtime, nothing extra happens */
+interface Animal {
+    dateOfBirth: any;
+}
+interface Dog extends Animal {
+    breed: any;
+}
+class AnimalHouse {
+    resident: Animal;
+    constructor(animal: Animal) {
+        this.resident = animal;
+    }
+}
+class DogHouse extends AnimalHouse {
+  // Does not emit JavaScript code,
+  // only ensures the types are correct
+    declare resident: Dog;
+    constructor(dog: Dog) {
+        super(dog);
+    }
+}
+
+/* ----------- Member Visibility ---------- */
+// public
+// The default visibility of class members is public. A public member can be accessed anywhere:
+class Greeters {
+  public greet() {
+    console.log("hi!");
+  }
+}
+const gs = new Greeters();
+gs.greet();
+
+// protected
+// protected members are only visible to subclasses of the class they’re declared in.
+class GreeterP {
+  public greet() {
+    console.log("Hello, " + this.getName());
+  }
+  protected getName() {
+    return "hi";
+  }
+}
+ 
+class SpecialGreeter extends GreeterP {
+  public howdy() {
+    // OK to access protected member here
+    console.log("Howdy, " + this.getName());
+  }
+}
+const gP = new SpecialGreeter();
+gP.greet(); // OK
+gP.howdy(); // OK
+// gP.getName(); //<-- Error
+
+// private
