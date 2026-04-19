@@ -1,4 +1,12 @@
 /* ----------- CLASSES ---------- */
+/* A TYPE annotation is simply when you explicitly tell the compiler what type 
+a variable, parameter, or value should be. 
+🧠 The simple truth
+👉 Property = anything that belongs to an object/class
+👉 Field = a property that stores data
+👉 Method = a property that is a function
+👉 Attribute = a property/field (data on an object)
+*/
 // Fields:: A field declaration creates a public writeable property on a class:
 // class Point {
 //     x: number;
@@ -39,4 +47,186 @@ you can use the definite assignment assertion operator, !: */
 class OkGreeter {
   // Not initialized, but no error
     name!: string;
+}
+
+/* ----------- readonly ---------- */
+class Greeter {
+  readonly name: string = "world";
+
+  constructor(names?: string) {
+    names !== undefined ? (this.name = names) : "";
+    // if (names !== undefined) {
+    //     this.name = names
+    // }
+  }
+    
+    err() {
+        // this.name = "not ok"
+        console.log("first")
+    }
+}
+let g = new Greeter();
+
+/* ----------- Constructors ---------- */
+/* Class constructors are very similar to functions. You can add 
+parameters with type annotations, default values, and overloads: 
+
+There are just a few differences between class constructor signatures 
+and function signatures:
+1. Constructors can’t have type parameters, EXAMPLE: ❌ constructor<T>() 
+INSTEAD make class itself generic ✅ class Box<T>
+2. Constructors can’t have return type annotations */
+class Point {
+  x: number;
+  y: number;
+
+  // Normal signature with defaults
+  constructor(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class Points {
+  x: number = 0;
+  y: number = 0;
+
+  // Constructor overloads
+  constructor(x: number, y: number);
+  constructor(xy: string);
+  constructor(x: string | number, y: number = 0) {}
+  // Code logic here
+}
+
+/* ----------- Super Calls ---------- */
+/* Just as in JavaScript, if you have a base class, you’ll need to 
+call super(); in your constructor body before using any this. members: */
+class Base {
+    k = 4;
+}
+
+class Derived extends Base {
+    constructor() {
+        super();
+        console.log(this.k);
+    }
+}
+
+/* ----------- Methods ---------- */
+/* Background Reading:
+Method definitions
+
+A function property on a class is called a method. Methods can use 
+all the same type annotations as functions and constructors: */
+class PointClass {
+    x = 10;
+    y = 10;
+    
+    scale(n: number): void {
+        this.x *= n;
+        this.y *= n;
+    }
+}
+
+/* Note that inside a method body, it is still mandatory to access 
+fields and other methods via `this.`. An unqualified name in a method 
+body will always refer to something in the enclosing scope:  */
+let x = 10;
+class C {
+    x: string = "hello";
+
+    m() {
+      // This is trying to modify 'x' from line 1, not the class property
+    //   x = "world";
+    }
+}
+
+/* ----------- Getters / Setters ---------- */
+// Classes can also have accessors:
+/* TypeScript has some special inference rules for accessors:
+1. If get exists but no set, the property is automatically readonly
+2. If the type of the setter parameter is not specified, it is 
+inferred from the return type of the getter */
+class accessorsClass {
+    _length = 0;
+
+    get length() {
+        return this._length;
+    }
+    set length(value) {
+        this._length = value;
+    }
+}
+
+// Since TypeScript 4.3, it is possible to have accessors with different 
+// types for getting and setting.
+class Thing {
+    _size = 0;
+
+    get size() {
+        return this.size;
+    }
+
+    set size(value: string | number | boolean) {
+      let num = Number(value);
+
+      // Don't allow NaN, Infinity, etc
+        if (!Number.isFinite(num)) {
+          this._size = 0;
+          return;
+        }
+        
+        this._size = num;
+    }
+}
+
+/* ----------- Index Signatures ---------- */
+class MyClass {
+    [s: string]: boolean | ((s: string) => boolean);
+
+    check(s: string) {
+        return this[s] as boolean;
+    }
+}
+
+/* ----------- Class Heritage ---------- */
+// Like other languages with object-oriented features, classes 
+// in JavaScript can inherit from base classes.
+
+// implements Clauses
+/* You can use an implements clause to check that a class 
+satisfies a particular interface. An error will be issued 
+if a class fails to correctly implement it: 
+Classes may also implement multiple interfaces, e.g. class C implements A, B {. */
+interface Pingable {
+  ping(): void;
+}
+class Sonar implements Pingable {
+    ping() {
+        console.log("void");
+    }
+}
+// Property 'ping' is missing in type 'Ball' but required in type 'Pingable'.
+// class Ball implements Pingable {
+//   poultry() {
+//     console.log("pong!");
+//   }
+// }
+
+/* ----------- Overriding Methods ---------- */
+/* A derived class can also override a base class field or property. 
+You can use the super. syntax to access base class methods */
+class BaseClass {
+    greet() {
+        console.log("Hello World");
+    }
+}
+class DerivedClass extends BaseClass {
+    greet(name?: string) {
+        if (name === undefined) {
+            super.greet();
+        } else {
+            console.log(`Hello, ${name.toUpperCase()}`);
+        }
+    }
 }
