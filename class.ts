@@ -303,3 +303,98 @@ gP.howdy(); // OK
 // gP.getName(); //<-- Error
 
 // private
+// private is like protected, but doesn’t allow access to the member even from subclasses:
+class BaseKlass {
+  private x = 0;
+}
+const bK = new BaseKlass();
+// Can't access from outside the class
+// Property 'x' is private and only accessible within class 'Base'.
+// console.log(bK.x);
+
+// Cross-instance private access
+// TypeScript does allow cross-instance private access:
+class A {
+    private x = 10;
+
+    public sameAs(other: A) {
+      // No error
+      return other.x === this.x;
+    }
+}
+
+class MySafe {
+  private secretKey = 12345;
+}
+// In a JavaScript file...
+const s = new MySafe();
+// Will print 12345
+console.log(s["secretKey"]);
+
+/* ----------- Static Members ---------- */
+/* Background Reading:
+Static Members (MDN)
+
+Classes may have static members. These members aren’t associated 
+with a particular instance of the class. They can be accessed 
+through the class constructor object itself: 
+Static members can also use the same public, protected, and private visibility modifiers:*/
+class MyStaticClass {
+    static x = 340;
+    static printX() {
+        console.log(MyStaticClass.x)
+    }
+}
+console.log(MyStaticClass.x);
+MyStaticClass.printX();
+
+// Static members are also inherited:
+class StaticBase {
+    namestr= 0
+    static getGreeting() {
+        return "Hello World";
+    }
+}
+class DerivedStaticBase extends StaticBase {
+    myGreeting = DerivedStaticBase.getGreeting();
+}
+
+/* ----------- Special Static Names ---------- */
+/* In JavaScript/TypeScript, classes are actually functions
+So this: In TS `class S {}` is like `function S() {}`.
+Functions already have built-in properties like: name, length, call
+❌ So this is NOT allowed: 👉 Because::name already exists on functions,
+You’re trying to overwrite it */
+// class S {
+//     static name = "S!"
+// }
+
+
+/* ----------- Why No Static Classes? ---------- */
+/* 🧠 Core meaning
+👉 TypeScript does NOT need “static classes”
+👉 Because you can already write code without putting everything inside a class
+🔍 Why other languages have static classes
+Languages like C#:
+Force everything (all data and functions) to be inside a class
+So they created “static class” for utility functions */
+// Unnecessary "static" class
+class MyStaticClassS {
+  static doSomething() {}
+}
+ 
+// Preferred (alternative 1)
+function doSomething() {}
+ 
+// Preferred (alternative 2)
+const MyHelperObject = {
+  dosomething() {},
+};
+
+/* ----------- static Blocks in Classes ---------- */
+/* 🧠 What is a static block?
+👉 A static { } block is code that runs once automatically when the 
+class is created (loaded), not when an object is created.
+🚀 Simple analogy
+Constructor → runs when object is created 🧱
+Static block → runs when class is loaded ⚙️  */
