@@ -431,3 +431,67 @@ class Boxe<Type> {
   // Static members cannot reference class type parameters.
 //   static defaultValue: Type;
 }
+
+/* ----------- `this` at Runtime in Classes ---------- */
+/* Background Reading: this keyword (MDN) It’s important to remember 
+that TypeScript doesn’t change the runtime behavior of JavaScript, 
+NOTE::JavaScript’s handling of this is indeed unusual:
+Long story short, by default, the value of this inside a function 
+depends on how the function was called. In this example, 
+because the function was called through the obj reference, 
+its value of this was obj rather than the class instance.*/
+class MyClasses {
+  name = "MyClass......";
+  getName() {
+    return this.name;
+  }
+}
+const cN = new MyClasses();
+const objN = {
+  name: "obj",
+  getName: cN.getName,
+};
+// 👉 NOTE THE DIFFERENCE `getName: cN.getName(),` NOT `getName: cN.getName`
+const objS = {
+  name: "obj",
+  getName: cN.getName(),
+};
+// Prints "obj", not "MyClass"
+console.log(objN.getName());
+// NOTE::Prints "MyClass", not "obj"
+console.log(objS.getName);
+
+/* ----------- Arrow Functions ---------- */
+/* If you have a function that will often be called in a way that 
+loses its this context, it can make sense to use an arrow function 
+property instead of a method definition: 
+
+This has some trade-offs: 
+👉 The `this` value is guaranteed to be correct at runtime, 
+❌ This will use more 👉memory, because each class instance 
+will have its own copy of each function defined this way
+❌ You can’t use super.getName in a derived class, because 
+there’s no entry in the prototype chain to fetch the base class method from
+*/
+class MyClassModified {
+  name = "MyClassModified";
+  getName = () => {
+    return this.name;
+  };
+}
+const cM = new MyClassModified();
+const gM = cM.getName;
+// Prints "MyClass" instead of crashing
+console.log(gM());
+
+/* ----------- `this` parameters ---------- */
+/* In a method or function definition, an initial parameter named this has 
+special meaning in TypeScript. These parameters are erased during compilation: */
+// TypeScript input with 'this' parameter
+function fn(this: string, x: number) {
+  /* ... */
+}
+// JavaScript output
+`function fn(x) {
+  /* ... */
+}`
