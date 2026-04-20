@@ -398,3 +398,36 @@ class is created (loaded), not when an object is created.
 🚀 Simple analogy
 Constructor → runs when object is created 🧱
 Static block → runs when class is loaded ⚙️  */
+// class Foo {
+//   static #count = 0;
+
+//   get count() {
+//     return Foo.#count;
+//   }
+
+//   static {
+//     try {
+//       const lastInstances = loadLastInstances();
+//       Foo.#count += lastInstances.length;
+//     } catch {}
+//   }
+// }
+
+/* ----------- Generic Classes ---------- */
+/* Classes, much like interfaces, can be generic. When a generic 
+class is instantiated with new, its type parameters are inferred 
+the same way as in a function call: */
+class Box<Type> {
+    contents: Type;
+    constructor(value: Type) {
+        this.contents = value;
+    }
+}
+const genericBox = new Box("hello!");
+
+/* ----------- Type Parameters in Static Members ---------- */
+// This code isn’t legal, and it may not be obvious why:
+class Boxe<Type> {
+  // Static members cannot reference class type parameters.
+//   static defaultValue: Type;
+}
