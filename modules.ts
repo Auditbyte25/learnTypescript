@@ -74,3 +74,44 @@ console.log("3.14");
 /* ----------- TypeScript Specific ES Module Syntax ---------- */
 /* Types can be exported and imported using the same syntax 
 as JavaScript values: */
+// NOTE:: TYPE AND INTERFACE ARE EXPORTED IN ANIMAL.TS
+import { Cat, Dog } from "./animal";
+type Animals = Cat | Dog;
+
+/* ----------- import type ---------- */
+// Which is an import statement which can only import types:
+import type { Dogg } from "./animal";
+export type Animal = Dogg;
+
+import type { createCatName } from "./animal";
+/* 'createCatName' cannot be used as a value because it was 
+imported using 'import type */
+// const name = createCatName();
+
+/* ----------- Inline type imports ---------- */
+/* TypeScript 4.5 also allows for individual imports to be prefixed with 
+type to indicate that the imported reference is a type: */
+import { createCatName as cN, type Dog as D } from "./animal";
+
+/* ----------- CommonJS Syntax ---------- */
+// CommonJS is the format which most modules on npm are delivered in. 
+/* Exporting
+Identifiers are exported via setting the `exports` property 
+on a global called module. */
+function absolutex(num: number) {
+  if (num < 0) return num * -1;
+  return num;
+}
+// module.exports = {
+//   pi: 3.14,
+//   squareTwo: 1.41,
+//   phi: 1.61,
+//   absolutex,
+// };
+
+// Then these files can be imported via a `require` statement:
+// const maths = require("./maths");
+
+// Or you can simplify a bit using the destructuring feature in JavaScript:
+// const { squareTwo } = require("./maths");
+// squareTwo;
