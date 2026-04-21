@@ -495,3 +495,7 @@ function fn(this: string, x: number) {
 `function fn(x) {
   /* ... */
 }`
+
+/* ----------- `this` Types ---------- */
+/* In classes, a special type called this refers dynamically to 
+the type of the current class. Let’s see how this is useful: */
