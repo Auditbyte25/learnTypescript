@@ -146,7 +146,7 @@ class C {
 /* TypeScript has some special inference rules for accessors:
 1. If get exists but no set, the property is automatically readonly
 2. If the type of the setter parameter is not specified, it is 
-inferred from the return type of the getter */
+inferred from the return type of the getterj */
 class accessorsClass {
     _length = 0;
 
