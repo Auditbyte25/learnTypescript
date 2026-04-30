@@ -19,25 +19,25 @@ a variable, parameter, or value should be.
 /* As with other locations, the type annotation is optional, 
 BUT IT WILL BE IMPLICIT `any` if not specified. */
 class NewPoint {
-    x = 0;
-    y = 0;
+  x = 0;
+  y = 0;
 }
 const pt = new NewPoint();
 // Prints 0, 0
 console.log(`${pt.x}, ${pt.y}`);
 // The initializer of a class property will be used to infer its type:
-console.log(typeof pt.x)
+console.log(typeof pt.x);
 
 /* ----------- --strictPropertyInitialization ---------- */
 // class BadGreeter {
 //     name: string;
 // }
 class BadGreeter {
-    name: string;
-    
-    constructor() {
-        this.name = "hello"
-    }
+  name: string;
+
+  constructor() {
+    this.name = "hello";
+  }
 }
 
 /* If you intend to definitely initialize a field through 
@@ -46,7 +46,7 @@ external library is filling in part of your class for you),
 you can use the definite assignment assertion operator, !: */
 class OkGreeter {
   // Not initialized, but no error
-    name!: string;
+  name!: string;
 }
 
 /* ----------- readonly ---------- */
@@ -59,11 +59,11 @@ class Greeter {
     //     this.name = names
     // }
   }
-    
-    err() {
-        // this.name = "not ok"
-        console.log("first")
-    }
+
+  err() {
+    // this.name = "not ok"
+    console.log("first");
+  }
 }
 let g = new Greeter();
 
@@ -102,14 +102,14 @@ class Points {
 /* Just as in JavaScript, if you have a base class, you’ll need to 
 call super(); in your constructor body before using any this. members: */
 class Base {
-    k = 4;
+  k = 4;
 }
 
 class Derived extends Base {
-    constructor() {
-        super();
-        console.log(this.k);
-    }
+  constructor() {
+    super();
+    console.log(this.k);
+  }
 }
 
 /* ----------- Methods ---------- */
@@ -119,13 +119,13 @@ Method definitions
 A function property on a class is called a method. Methods can use 
 all the same type annotations as functions and constructors: */
 class PointClass {
-    x = 10;
-    y = 10;
-    
-    scale(n: number): void {
-        this.x *= n;
-        this.y *= n;
-    }
+  x = 10;
+  y = 10;
+
+  scale(n: number): void {
+    this.x *= n;
+    this.y *= n;
+  }
 }
 
 /* Note that inside a method body, it is still mandatory to access 
@@ -133,12 +133,12 @@ fields and other methods via `this.`. An unqualified name in a method
 body will always refer to something in the enclosing scope:  */
 let x = 10;
 class C {
-    x: string = "hello";
+  x: string = "hello";
 
-    m() {
-      // This is trying to modify 'x' from line 1, not the class property
+  m() {
+    // This is trying to modify 'x' from line 1, not the class property
     //   x = "world";
-    }
+  }
 }
 
 /* ----------- Getters / Setters ---------- */
@@ -146,51 +146,51 @@ class C {
 /* TypeScript has some special inference rules for accessors:
 1. If get exists but no set, the property is automatically readonly
 2. If the type of the setter parameter is not specified, it is 
-inferred from the return type of the getterj */
+inferred from the return type of the getter */
 class accessorsClass {
-    _length = 0;
+  _length = 0;
 
-    get length() {
-        return this._length;
-    }
-    set length(value) {
-        this._length = value;
-    }
+  get length() {
+    return this._length;
+  }
+  set length(value) {
+    this._length = value;
+  }
 }
 
-// Since TypeScript 4.3, it is possible to have accessors with different 
+// Since TypeScript 4.3, it is possible to have accessors with different
 // types for getting and setting.
 class Thing {
-    _size = 0;
+  _size = 0;
 
-    get size() {
-        return this.size;
+  get size() {
+    return this.size;
+  }
+
+  set size(value: string | number | boolean) {
+    let num = Number(value);
+
+    // Don't allow NaN, Infinity, etc
+    if (!Number.isFinite(num)) {
+      this._size = 0;
+      return;
     }
 
-    set size(value: string | number | boolean) {
-      let num = Number(value);
-
-      // Don't allow NaN, Infinity, etc
-        if (!Number.isFinite(num)) {
-          this._size = 0;
-          return;
-        }
-        
-        this._size = num;
-    }
+    this._size = num;
+  }
 }
 
 /* ----------- Index Signatures ---------- */
 class MyClass {
-    [s: string]: boolean | ((s: string) => boolean);
+  [s: string]: boolean | ((s: string) => boolean);
 
-    check(s: string) {
-        return this[s] as boolean;
-    }
+  check(s: string) {
+    return this[s] as boolean;
+  }
 }
 
 /* ----------- Class Heritage ---------- */
-// Like other languages with object-oriented features, classes 
+// Like other languages with object-oriented features, classes
 // in JavaScript can inherit from base classes.
 
 // implements Clauses
@@ -202,9 +202,9 @@ interface Pingable {
   ping(): void;
 }
 class Sonar implements Pingable {
-    ping() {
-        console.log("void");
-    }
+  ping() {
+    console.log("void");
+  }
 }
 // Property 'ping' is missing in type 'Ball' but required in type 'Pingable'.
 // class Ball implements Pingable {
@@ -217,19 +217,19 @@ class Sonar implements Pingable {
 /* A derived class can also override a base class field or property. 
 You can use the `super.` syntax to access base class methods */
 class BaseClass {
-    namestr = "tyu";
-    greet() {
-        console.log("Hello World");
-    }
+  namestr = "tyu";
+  greet() {
+    console.log("Hello World");
+  }
 }
 class DerivedClass extends BaseClass {
-    greet(name?: string) {
-        if (name === undefined) {
-            super.greet();
-        } else {
-            console.log(`Hello, ${name.toUpperCase()}`);
-        }
+  greet(name?: string) {
+    if (name === undefined) {
+      super.greet();
+    } else {
+      console.log(`Hello, ${name.toUpperCase()}`);
     }
+  }
 }
 const d = new DerivedClass();
 d.greet();
@@ -249,24 +249,24 @@ So:
 1. TypeScript knows resident is now Dog
 2. But at runtime, nothing extra happens */
 interface Animal {
-    dateOfBirth: any;
+  dateOfBirth: any;
 }
 interface Dog extends Animal {
-    breed: any;
+  breed: any;
 }
 class AnimalHouse {
-    resident: Animal;
-    constructor(animal: Animal) {
-        this.resident = animal;
-    }
+  resident: Animal;
+  constructor(animal: Animal) {
+    this.resident = animal;
+  }
 }
 class DogHouse extends AnimalHouse {
   // Does not emit JavaScript code,
   // only ensures the types are correct
-    declare resident: Dog;
-    constructor(dog: Dog) {
-        super(dog);
-    }
+  declare resident: Dog;
+  constructor(dog: Dog) {
+    super(dog);
+  }
 }
 
 /* ----------- Member Visibility ---------- */
@@ -290,7 +290,7 @@ class GreeterP {
     return "hi";
   }
 }
- 
+
 class SpecialGreeter extends GreeterP {
   public howdy() {
     // OK to access protected member here
@@ -315,12 +315,12 @@ const bK = new BaseKlass();
 // Cross-instance private access
 // TypeScript does allow cross-instance private access:
 class A {
-    private x = 10;
+  private x = 10;
 
-    public sameAs(other: A) {
-      // No error
-      return other.x === this.x;
-    }
+  public sameAs(other: A) {
+    // No error
+    return other.x === this.x;
+  }
 }
 
 class MySafe {
@@ -340,23 +340,23 @@ with a particular instance of the class. They can be accessed
 through the class constructor object itself: 
 Static members can also use the same public, protected, and private visibility modifiers:*/
 class MyStaticClass {
-    static x = 340;
-    static printX() {
-        console.log(MyStaticClass.x)
-    }
+  static x = 340;
+  static printX() {
+    console.log(MyStaticClass.x);
+  }
 }
 console.log(MyStaticClass.x);
 MyStaticClass.printX();
 
 // Static members are also inherited:
 class StaticBase {
-    namestr= 0
-    static getGreeting() {
-        return "Hello World";
-    }
+  namestr = 0;
+  static getGreeting() {
+    return "Hello World";
+  }
 }
 class DerivedStaticBase extends StaticBase {
-    myGreeting = DerivedStaticBase.getGreeting();
+  myGreeting = DerivedStaticBase.getGreeting();
 }
 
 /* ----------- Special Static Names ---------- */
@@ -368,7 +368,6 @@ You’re trying to overwrite it */
 // class S {
 //     static name = "S!"
 // }
-
 
 /* ----------- Why No Static Classes? ---------- */
 /* 🧠 Core meaning
@@ -382,10 +381,10 @@ So they created “static class” for utility functions */
 class MyStaticClassS {
   static doSomething() {}
 }
- 
+
 // Preferred (alternative 1)
 function doSomething() {}
- 
+
 // Preferred (alternative 2)
 const MyHelperObject = {
   dosomething() {},
@@ -418,10 +417,10 @@ Static block → runs when class is loaded ⚙️  */
 class is instantiated with new, its type parameters are inferred 
 the same way as in a function call: */
 class Box<Type> {
-    contents: Type;
-    constructor(value: Type) {
-        this.contents = value;
-    }
+  contents: Type;
+  constructor(value: Type) {
+    this.contents = value;
+  }
 }
 const genericBox = new Box("hello!");
 
@@ -429,7 +428,7 @@ const genericBox = new Box("hello!");
 // This code isn’t legal, and it may not be obvious why:
 class Boxe<Type> {
   // Static members cannot reference class type parameters.
-//   static defaultValue: Type;
+  //   static defaultValue: Type;
 }
 
 /* ----------- `this` at Runtime in Classes ---------- */
@@ -494,7 +493,7 @@ function fn(this: string, x: number) {
 // JavaScript output
 `function fn(x) {
   /* ... */
-}`
+}`;
 
 /* ----------- `this` Types ---------- */
 /* In classes, a special type called this refers dynamically to 
