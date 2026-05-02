@@ -156,4 +156,4 @@ const p = new PointD(10, 20);
 console.log(p.x); // 10
 
 /* ----------------- Property Decorators ---------------- */
-// A Property Decorator is declared just before a property declaration.
+// A Property Decorator is declared just before a property declaration.---------
