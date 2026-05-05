@@ -25,4 +25,13 @@ when other tools are used to process the resulting modules, such as bundlers
 The amd-module directive allows passing an optional module name to the 
 compiler: */
 /// <amd-module name="NamedModule" />
-export class C { };
+export class C { }; 
+
+/* /// <amd-dependency path="x" /> informs the compiler about a non-TS 
+module dependency that needs to be injected in the resulting module’s 
+require call. */
+/// <amd-dependency path="legacy/moduleA" name="moduleA" />
+
+/* Triple-slash directives can be marked with preserve="true" to prevent 
+the compiler from removing them from the output. */
+/// <reference path="..." preserve="true" />
